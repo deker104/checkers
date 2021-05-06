@@ -1,5 +1,21 @@
+import React from "react";
+import Board from "./Board";
+
 function App() {
-  return <h1>Hello, World!</h1>;
+  const [count, setCount] = React.useState(0);
+  return (
+    <div>
+      <Board />
+      <p>{count}</p>
+      <button
+        onClick={() => {
+          setCount(count + 1);
+        }}
+      >
+        Click!
+      </button>
+    </div>
+  );
 }
 
 export default App;

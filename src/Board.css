@@ -1,0 +1,27 @@
+.Board {
+  width: 400px;
+  border: 2px solid #404040;
+}
+
+.Square {
+  float: left;
+  position: relative;
+  width: 50px;
+  height: 50px;
+}
+
+.black {
+  background-color: #b58863;
+}
+
+.white {
+  background-color: #f0d9b5;
+}
+
+.selected {
+  box-shadow: inset 0px 0px 10px #0f0;
+}
+
+.clearfix {
+  clear: both;
+}
