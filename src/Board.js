@@ -1,39 +1,63 @@
-import React from "react";
+import React, { useEffect, useState, useMemo } from "react";
+import { chunk } from "lodash";
+import produce from "immer";
 import "./Board.css";
 
 function Board() {
-  const rows = React.useMemo(() => {
-    const rows = [];
-    for (var x = 0; x < 8; x++) {
-      rows.push(<Row key={x} x={x} />);
+  const [squares, setSquares] = useState([]);
+
+  useEffect(() => {
+    const squaresNew = [];
+    for (var i = 0; i < 64; i++) {
+      squaresNew.push({ selected: false });
     }
-    return rows;
+    setSquares(squaresNew);
   }, []);
-  return <div className="Board">{rows}</div>;
+
+  function squareCallback(i) {
+    return () => {
+      console.log("Click!");
+      setSquares(
+        produce((draft) => {
+          draft[i].selected ^= 1;
+        })
+      );
+    };
+  }
+
+  return useMemo(
+    () =>
+      chunk(
+        squares.map(({ selected }, i) => (
+          <Square
+            x={i % 8}
+            y={Math.floor(i / 8)}
+            selected={selected}
+            onClick={squareCallback(i)}
+            key={i}
+          />
+        )),
+        8
+      ).map((row, i) => <Row key={i}>{row}</Row>),
+    [squares]
+  );
 }
 
-function Row({ x }) {
-  const squares = React.useMemo(() => {
-    const squares = [];
-    for (var y = 0; y < 8; y++) {
-      squares.push(<Square key={`${x} ${y}`} x={x} y={y} />);
-    }
-    return squares;
-  }, [x]);
+function Row({ children }) {
   return (
     <div className="Row">
-      {squares}
-      <div className="clearfix"></div>
+      {children}
+      <div className="clearfix" />
     </div>
   );
 }
 
-function Square({ x, y }) {
+function Square({ x, y, selected, onClick }) {
+  console.log("Render: Square!");
   const color = (x & 1) ^ (y & 1) ? "black" : "white";
-  const [selected, setSelected] = React.useState(false);
   return (
     <div
-      onClick={() => setSelected(selected ^ 1)}
+      onClick={onClick}
       className={`Square ${color} ${selected ? "selected" : ""}`}
     ></div>
   );
