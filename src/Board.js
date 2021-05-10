@@ -16,7 +16,6 @@ function Board() {
 
   function squareCallback(i) {
     return () => {
-      console.log("Click!");
       setSquares(
         produce((draft) => {
           draft[i].selected ^= 1;
@@ -53,7 +52,6 @@ function Row({ children }) {
 }
 
 function Square({ x, y, selected, onClick }) {
-  console.log("Render: Square!");
   const color = (x & 1) ^ (y & 1) ? "black" : "white";
   return (
     <div
